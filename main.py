@@ -5,7 +5,7 @@ print(url)
 url = url.strip
 
 #Validação da URL
-if url == ""
+if url == "":
     raise ValueError("A URL está vazia")
 
 #Separa base e os parâmetros
