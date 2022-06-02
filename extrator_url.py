@@ -31,6 +31,18 @@ class ExtratorURL:
         indice_e_comercial = url_parametros.find('&', indice_valor)
         return url_parametros[indice_valor:] if indice_e_comercial == -1 else url_parametros[indice_valor:indice_e_comercial]
 
+    def converter_moeda(self):
+        valor_dolar = 4.7
+        moeda_origem = self.get_valor_parametro('moedaOrigem')
+        moeda_destino = self.get_valor_parametro('moedaDestino')
+        quantidade = int(self.get_valor_parametro('quantidade'))
+        if moeda_origem == 'dolar' and moeda_destino == 'real':
+            return 'Valor da conversão: ' + str(quantidade * valor_dolar) + ' reais'
+        elif moeda_origem == 'real' and moeda_destino == 'dolar':
+            return 'Valor da conversão: ' + str(quantidade / valor_dolar) + ' dólares'
+        else:
+            raise ValueError('Moedas de origem e destino não suportadas')
+
     def __len__(self):
         return len(self.url)
 
@@ -40,7 +52,9 @@ class ExtratorURL:
     def __eq__(self, other):
         return self.url == other.url
 
-extrator_url = ExtratorURL("https://bytebank.com/cambio?quantidade=100&moedaOrigem=real&moedaDestino=dolar")
+extrator_url = ExtratorURL("https://bytebank.com/cambio?quantidade=100&moedaOrigem=dolar&moedaDestino=real")
 # extrator_url = ExtratorURL(None)
 valor_quantidade = extrator_url.get_valor_parametro('quantidade')
-print(valor_quantidade)
+valor_convertido = extrator_url.converter_moeda()
+print('Quantidade: ' + valor_quantidade)
+print(valor_convertido)
